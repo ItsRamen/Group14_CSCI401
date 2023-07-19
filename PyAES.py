@@ -29,7 +29,7 @@ def encrypt_text(password, plaintext):
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
 
-    return ciphertext
+    return iv + ciphertext  # Include the IV in the returned ciphertext
 
 def decrypt_text(password, ciphertext):
     salt = b'\xdd\xe4\xe6-\x9c\x8b\xb3\x8d\x05\xd5\xb8\x0f\xea\xa7~'
@@ -49,8 +49,10 @@ def decrypt_text(password, ciphertext):
     decryptor = cipher.decryptor()
     plaintext = decryptor.update(ciphertext[16:]) + decryptor.finalize()
 
-    return plaintext
+    unpadder = padding.PKCS7(algorithms.AES.block_size).unpadder()
+    unpadded_plaintext = unpadder.update(plaintext) + unpadder.finalize()
 
+    return unpadded_plaintext
 
 user_input = input("Enter the text to encrypt: ")
 password = input("Enter the encryption password: ")
