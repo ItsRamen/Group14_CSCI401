@@ -54,13 +54,36 @@ def decrypt_text(password, ciphertext):
 
     return unpadded_plaintext
 
-user_input = input("Enter the text to encrypt: ")
-password = input("Enter the encryption password: ")
+def start_menu():
+    print("Start Menu:")
+    print("1. PyEncrypt")
+    print("2. PyDecrypt")
+    choice = input("Enter your choice (1/2): ")
+    if choice == '1':
+        py_encrypt()
+    elif choice == '2':
+        py_decrypt()
+    else:
+        print("Invalid choice. Please choose a valid option (1 or 2).")
 
-encrypted_data = encrypt_text(password.encode(), user_input.encode())
+def py_encrypt():
+    user_input = input("Enter the text to encrypt: ")
+    password = input("Enter the encryption password: ")
 
-print("Encrypted text:", base64.urlsafe_b64encode(encrypted_data).decode())
+    encrypted_data = encrypt_text(password.encode(), user_input.encode())
 
-decrypted_data = decrypt_text(password.encode(), encrypted_data)
+    print("Encrypted text:", base64.urlsafe_b64encode(encrypted_data).decode())
 
-print("Decrypted text:", decrypted_data.decode())
+def py_decrypt():
+    encrypted_text = input("Enter the encrypted text: ")
+    password = input("Enter the decryption password: ")
+
+    encrypted_data = base64.urlsafe_b64decode(encrypted_text.encode())
+
+    decrypted_data = decrypt_text(password.encode(), encrypted_data)
+
+    print("Decrypted text:", decrypted_data.decode())
+
+if __name__ == "__main__":
+    print("Welcome to PyEncrypt/PyDecrypt!")
+    start_menu()
